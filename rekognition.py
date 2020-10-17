@@ -1,20 +1,20 @@
 import boto3
-import base64
 import sys
 
 client = boto3.client('rekognition')
 
 
-def encode_faces(filename):
+def get_image_from_file(filename):
     with open(filename, "rb") as f:
-        bImgBase64 = base64.b64encode(f.read())
-    return bImgBase64
+        image_bytes= f.read()
+
+    return image_bytes
 
 
-def detect_faces(image_b64):
+def detect_faces(image_bytes):
     response = client.detect_faces(
         Image={
-            'Bytes': image_b64,
+            'Bytes': image_bytes,
         },
         Attributes=[
             'ALL',
@@ -27,5 +27,5 @@ if __name__ == '__main__':
     args = sys.argv
     filename = args[1]
     print(filename)
-    result = detect_faces(encode_faces(filename))
+    result = detect_faces(get_image_from_file(filename))
     print(result)
