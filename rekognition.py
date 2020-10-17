@@ -29,3 +29,4 @@ if __name__ == '__main__':
     print(filename)
     result = detect_faces(get_image_from_file(filename))
     print(result)
+    print(len(result['FaceDetails']))
