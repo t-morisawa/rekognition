@@ -1,8 +1,15 @@
 import boto3
 import sys
+import json
 
-client = boto3.client('rekognition')
+with open("src/aws.json", "r") as f:
+    AWS_PROFILES = json.load(f)
 
+client = boto3.client('rekognition',
+                      region_name=AWS_PROFILES['AWS_DEFAULT_REGION'],
+                      aws_access_key_id=AWS_PROFILES['AWS_ACCESS_KEY_ID'],
+                      aws_secret_access_key=AWS_PROFILES['AWS_SECRET_ACCESS_KEY'],
+)
 
 def get_image_from_file(filename):
     with open(filename, "rb") as f:
