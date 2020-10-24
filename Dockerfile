@@ -1,9 +1,8 @@
 FROM python:3
 
-COPY requirements.txt /
-COPY rekognition.py /
-COPY sample.jpg /
+COPY src /src
+COPY images /images
 
-RUN pip install -r requirements.txt
+RUN pip install -r src/requirements.txt
 
-ENTRYPOINT ["python", "rekognition.py"]
+ENTRYPOINT ["python", "src/rekognition.py"]
