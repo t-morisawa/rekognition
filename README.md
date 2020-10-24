@@ -1,26 +1,20 @@
 # 顔認識
 
-## サンプル
+## Docker
 
 ### 環境構築
 
-1. 仮想環境
-
 ```
-python -m venv venv
-. venv/bin/activate
-pip install -r requirements.txt
+cp src/aws.json.sample src/aws.json
 ```
 
-2. aws profileの設定
+aws.jsonにAWSのアクセスキー・アクセスシークレットを記入
 
- - `~/.aws/config` `./.aws/credentials` にアクセスキーやリージョンを設定する
- - https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-profiles.html
-
-### 実行
+### 起動
 
 ```
-AWS_PROFILE=<profile> python rekognition.py sample.jpg
+docker build -t rekognition .
+docker run rekognition images/sample.jpg
 ```
 
-`profile`: aws profileの名前
+ソースコードの更新・画像の更新ごとにbuildから実行する必要あり
