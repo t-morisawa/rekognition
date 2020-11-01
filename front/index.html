@@ -1,28 +1,62 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta charset="UTF-8">
-  <!-- import CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <meta charset="UTF-8">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 </head>
+
 <body>
-  <div id="app">
-    <el-button @click="visible = true">Button</el-button>
-    <el-dialog :visible.sync="visible" title="Hello world">
-      <p>Try Element</p>
-    </el-dialog>
-  </div>
+    <div id="app">
+        <el-button @click="visible = true">Button</el-button>
+        <el-dialog :visible.sync="visible" title="Hello world">
+            <p>Try Element</p>
+        </el-dialog>
+        <input @change="selectedFile" type="file" name="file">
+        <el-button>file upload</el-button>
+    </div>
 </body>
-  <!-- import Vue before Element -->
-  <script src="https://unpkg.com/vue/dist/vue.js"></script>
-  <!-- import JavaScript -->
-  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-  <script>
+<!-- import Vue, Element, axios -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
     new Vue({
-      el: '#app',
-      data: function() {
-        return { visible: false }
-      }
+        el: '#app',
+        data: function () {
+            return {
+                visible: false,
+                uploadFile: null
+            }
+        },
+        methods: {
+            selectedFile: function (e) {
+                // 選択された File の情報を保存しておく
+                e.preventDefault();
+                let files = e.target.files;
+                this.uploadFile = files[0];
+            },
+            upload: function () {
+                // FormData を利用して File を POST する
+                let formData = new FormData();
+                formData.append('yourFileKey', this.uploadFile);
+                let config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                };
+                axios
+                    .post('yourUploadUrl', formData, config)
+                    .then(function (response) {
+                        // response 処理
+                    })
+                    .catch(function (error) {
+                        // error 処理
+                    })
+            }
+        }
     })
-  </script>
+</script>
+
 </html>
