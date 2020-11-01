@@ -3,6 +3,7 @@ import sys
 import json
 import asyncio
 import aioboto3
+import time
 
 with open("src/aws.json", "r") as f:
     AWS_PROFILES = json.load(f)
@@ -53,6 +54,12 @@ if __name__ == '__main__':
 
     detectfaces = DetectFaces()
 
+    start = time.time()
     asyncio.run(main(args,detectfaces))
+    elapsed = time.time() - start
+
+    print(f"{elapsed:.3f}s")  # 秒
+    print(f"{elapsed * 1000:.0f}ms")  # ミリ秒
+    print(f"{elapsed * 1000000:.0f}μs")  # ナノ秒
 
     print(detectfaces.get_result())
