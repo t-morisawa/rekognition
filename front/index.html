@@ -13,8 +13,10 @@
         <el-dialog :visible.sync="visible" title="Hello world">
             <p>Try Element</p>
         </el-dialog>
-        <input @change="selectedFile" type="file" name="file">
-        <el-button>file upload</el-button>
+        <form>
+            <input @change="selectedFile" type="file" name="file">
+            <el-button @click="upload" type="submit">file upload</el-button>
+        </form>
     </div>
 </body>
 <!-- import Vue, Element, axios -->
@@ -47,7 +49,7 @@
                     }
                 };
                 axios
-                    .post('yourUploadUrl', formData, config)
+                    .post('http://localhost:8080', formData, config)
                     .then(function (response) {
                         // response 処理
                     })
