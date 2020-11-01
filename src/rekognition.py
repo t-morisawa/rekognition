@@ -1,6 +1,7 @@
 import boto3
 import sys
 import json
+import asyncio
 
 with open("src/aws.json", "r") as f:
     AWS_PROFILES = json.load(f)
@@ -17,23 +18,38 @@ def get_image_from_file(filename):
 
     return image_bytes
 
+async def gather(args, detectfaces):
+    await asyncio.gather(*[detectfaces.detect_faces(x) for x in args])
 
-def detect_faces(image_bytes):
-    response = client.detect_faces(
-        Image={
-            'Bytes': image_bytes,
-        },
-        Attributes=[
-            'ALL',
-        ]
-    )
-    return response
+class DetectFaces:
+    def __init__(self):
+        self.result = []
 
+    async def detect_faces(self, image_bytes):
+        filename = image_bytes
+        result = client.detect_faces(
+            Image={
+                'Bytes': get_image_from_file(image_bytes),
+            },
+            Attributes=[
+                'ALL',
+            ]
+        )
 
+        self.result.append({"filename":filename, "result":result})
+
+        #print(len(result['FaceDetails']))
+
+    def get_result(self):
+        return self.result
+    
 if __name__ == '__main__':
     args = sys.argv
-    filename = args[1]
-    print(filename)
-    result = detect_faces(get_image_from_file(filename))
-    print(result)
-    print(len(result['FaceDetails']))
+
+    args.pop(0)
+
+    detectfaces = DetectFaces()
+
+    asyncio.run(gather(args,detectfaces))
+
+    print(detectfaces.get_result())
