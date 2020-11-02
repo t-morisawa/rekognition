@@ -32,20 +32,23 @@ class DetectFaces:
         print("finished: " + filename)
         #print(len(result['FaceDetails']))
 
+    async def detect_faces_from_mulptiple(self, image_files):
+        async with aioboto3.client('rekognition',
+                        region_name=AWS_PROFILES['AWS_DEFAULT_REGION'],
+                        aws_access_key_id=AWS_PROFILES['AWS_ACCESS_KEY_ID'],
+                        aws_secret_access_key=AWS_PROFILES['AWS_SECRET_ACCESS_KEY'],
+        ) as client:
+            await asyncio.gather(*[self.detect_faces(x, client) for x in image_files])
+
     def get_result(self):
         return self.result
 
-async def main(args):
+async def main(image_files):
     detectfaces = DetectFaces()
 
-    async with aioboto3.client('rekognition',
-                      region_name=AWS_PROFILES['AWS_DEFAULT_REGION'],
-                      aws_access_key_id=AWS_PROFILES['AWS_ACCESS_KEY_ID'],
-                      aws_secret_access_key=AWS_PROFILES['AWS_SECRET_ACCESS_KEY'],
-    ) as client:
-        start = time.time()
-        await asyncio.gather(*[detectfaces.detect_faces(x, client) for x in args])
-        elapsed = time.time() - start
+    start = time.time()
+    await detectfaces.detect_faces_from_mulptiple(image_files)
+    elapsed = time.time() - start
 
     print(f"{elapsed * 1000:.0f}ms")  # ミリ秒
     print(detectfaces.get_result())
