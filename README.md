@@ -32,5 +32,5 @@ python src/rekognition.py images/sample.jpg
 
 ```
 docker build -t rekognition-web -f Dockerfile-web .
-docker run -p 8080:8080 rekognition-web
+docker run -d -p 8080:8080 -v $(pwd)/web:/app rekognition-web
 ```
