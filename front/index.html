@@ -29,7 +29,7 @@
         data: function () {
             return {
                 visible: false,
-                uploadFile: null
+                uploadFiles: []
             }
         },
         methods: {
@@ -37,12 +37,12 @@
                 // 選択された File の情報を保存しておく
                 e.preventDefault();
                 let files = e.target.files;
-                this.uploadFile = files[0];
+                this.uploadFiles = files;
             },
             upload: function () {
                 // FormData を利用して File を POST する
                 let formData = new FormData();
-                formData.append('yourFileKey', this.uploadFile);
+                formData.append('images', this.uploadFiles);
                 let config = {
                     headers: {
                         'content-type': 'multipart/form-data'
