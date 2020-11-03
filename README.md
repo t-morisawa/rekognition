@@ -1,8 +1,8 @@
 # 顔認識
 
-## Docker
+# Pythonコンソール
 
-### 環境構築
+## 環境構築
 
 ```
 cp src/aws.json.sample src/aws.json
@@ -14,7 +14,7 @@ aws.jsonにAWSのアクセスキー・アクセスシークレットを記入
 docker build -t rekognition .
 ```
 
-### 起動
+## 起動
 
 Dockerコンテナで起動しているPython Shellにログイン
 
@@ -26,4 +26,11 @@ Pythonプログラムを実行
 
 ```
 python src/rekognition.py images/sample.jpg
+```
+
+# Webアプリ
+
+```
+docker build -t rekognition-web -f Dockerfile-web .
+docker run -p 8080:8080 rekognition-web
 ```
