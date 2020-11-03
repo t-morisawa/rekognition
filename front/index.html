@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+
+<body>
+    <div id="app">
+        <el-button @click="visible = true">Button</el-button>
+        <el-dialog :visible.sync="visible" title="Hello world">
+            <p>Try Element</p>
+        </el-dialog>
+        <form>
+            <input @change="selectedFile" type="file" name="file" multiple>
+            <el-button @click="upload" type="submit">file upload</el-button>
+        </form>
+    </div>
+</body>
+<!-- import Vue, Element, axios -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                visible: false,
+                uploadFiles: []
+            }
+        },
+        methods: {
+            selectedFile: function (e) {
+                // 選択された File の情報を保存しておく
+                e.preventDefault();
+                let files = e.target.files;
+                this.uploadFiles = files;
+            },
+            upload: function () {
+                // FormData を利用して File を POST する
+                let formData = new FormData();
+                formData.append('images', this.uploadFiles);
+                let config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                };
+                axios
+                    .post('http://localhost:8080', formData, config)
+                    .then(function (response) {
+                        // response 処理
+                    })
+                    .catch(function (error) {
+                        // error 処理
+                    })
+            }
+        }
+    })
+</script>
+
+</html>
