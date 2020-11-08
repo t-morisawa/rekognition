@@ -28,9 +28,17 @@ Pythonプログラムを実行
 python src/rekognition.py images/sample.jpg
 ```
 
-# Webアプリ
+# Webサーバ
 
 ```
 docker build -t rekognition-web -f Dockerfile-web .
 docker run -d -p 8080:8080 -v $(pwd)/web:/app rekognition-web
+```
+
+# Webページ
+
+`front/index.html` をブラウザで開く
+
+```
+open front/index.html
 ```
