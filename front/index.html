@@ -48,8 +48,12 @@
             upload: function () {
                 // FormData を利用して File を POST する
                 let formData = new FormData();
-                formData.append('images', this.uploadFiles);
                 formData.append('image', this.uploadFile);
+
+                for(let i = 0; i < this.uploadFiles.length; i++) {
+                    formData.append('image-' + String(i), this.uploadFiles[i]);
+                }
+
                 let config = {
                     headers: {
                         'content-type': 'multipart/form-data'
