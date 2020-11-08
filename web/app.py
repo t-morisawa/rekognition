@@ -1,5 +1,6 @@
 import responder
 import reprlib
+import aioboto3
 
 api = responder.API(cors=True, cors_params={
     'allow_origins': ['*'],
