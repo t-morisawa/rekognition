@@ -15,7 +15,6 @@ async def hello_world(req, resp):
     #f.write(data['file']['content'].decode('utf-8'))
     #f.close()
 
-    resp.media = {'success': 'ok'}
+    resp.media = {'filename': str(data["image"]["filename"])}
     #print(data["image"])
- 
-    resp.text = str(data["image"]["filename"])
+    #resp.text = str(data["image"]["filename"])
