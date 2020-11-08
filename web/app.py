@@ -1,4 +1,5 @@
 import responder
+import reprlib
 
 api = responder.API(cors=True, cors_params={
     'allow_origins': ['*'],
@@ -14,6 +15,8 @@ async def hello_world(req, resp):
     #f = open('./{}'.format(data['file']['filename']), 'w')
     #f.write(data['file']['content'].decode('utf-8'))
     #f.close()
+
+    print(reprlib.repr(data))
 
     resp.media = {'filename': str(data["image"]["filename"])}
     #print(data["image"])
