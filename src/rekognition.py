@@ -14,6 +14,12 @@ def get_image_from_file(filename):
     return image_bytes
 
 class FaceDetector:
+    """
+    顔認証クラス
+
+    利用方法
+    await FaceDetector().detect(image_files)
+    """    
     def __init__(self):
         self.result = []
 
@@ -33,6 +39,11 @@ class FaceDetector:
         #print(len(result['FaceDetails']))
 
     async def detect(self, image_files):
+        """
+        顔認証メソッド
+
+        :param list image_files ファイル名のリスト
+        """
         async with aioboto3.client('rekognition',
                         region_name=AWS_PROFILES['AWS_DEFAULT_REGION'],
                         aws_access_key_id=AWS_PROFILES['AWS_ACCESS_KEY_ID'],
