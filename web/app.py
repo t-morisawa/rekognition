@@ -33,7 +33,7 @@ async def hello_world(req, resp):
     await detectfaces.detect(data)
     print(detectfaces.get_result())
 
-    #resp.media = filename
+    resp.media = detectfaces.get_result()
 
     #print(data["image"])
     #resp.text = str(data["image"]["filename"])
