@@ -7,5 +7,15 @@ api = responder.API(cors=True, cors_params={
 })
 
 @api.route("/")
-def hello_world(req, resp):
-    resp.text = "hello, world!"
+async def hello_world(req, resp):
+
+    data = await req.media(format='files')
+
+    #f = open('./{}'.format(data['file']['filename']), 'w')
+    #f.write(data['file']['content'].decode('utf-8'))
+    #f.close()
+
+    resp.media = {'success': 'ok'}
+    #print(data["image"])
+ 
+    resp.text = str(data["image"]["filename"])
