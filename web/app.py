@@ -19,7 +19,11 @@ async def hello_world(req, resp):
     print(reprlib.repr(data))
 
     # resp.media = {'filename': str(data["image"]["filename"])}
-    resp.media = []
+    filename = []
+    for v in data.values():
+         filename.append({'filename': v["filename"]})
+
+    resp.media = filename
 
     #print(data["image"])
     #resp.text = str(data["image"]["filename"])
