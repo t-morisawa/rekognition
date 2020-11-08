@@ -15,7 +15,7 @@ def get_image_from_file(filename):
 
 class FaceDetector:
     """
-    顔認証クラス
+    顔認証クラス
 
     利用方法
     await FaceDetector().detect(image_files)
