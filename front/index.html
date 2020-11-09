@@ -19,7 +19,7 @@
         </form>
         <div v-for="datum in data">
           <img :src="datum.brobUrl" height="200">
-          <p v-if="datum.result">{{ datum.result[0].AgeRange.Low }}</p>
+          <p v-if="datum.result">{{ datum.result[0].AgeRange.Low }} - {{ datum.result[0].AgeRange.High }}</p>
         </div>
     </div>
 </body>
@@ -69,7 +69,7 @@
                     .post('http://localhost:8080', formData, config)
                     .then(function (response) {
                         for(let i = 0; i < response.data.length; i++) {
-                            vm.data[i].result = response.data[0].result.FaceDetails;
+                            vm.data[i].result = response.data[i].result.FaceDetails;
                         }
                         console.log(vm.data)
                     })
