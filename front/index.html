@@ -17,9 +17,11 @@
           <input @change="selectedFile" type="file" name="file" multiple>
           <el-button @click="upload" type="submit">file upload</el-button>
         </form>
-        <div v-for="brobUrl in brobUrls">
-          <img :src="brobUrl" height="200">
+        <div v-for="datum in data">
+          <img :src="datum.brobUrl" height="200">
+          <p v-if="datum.result">{{ datum.result[0].AgeRange.Low }}</p>
         </div>
+        <p>{{data}}</p>
     </div>
 </body>
 <!-- import Vue, Element, axios -->
@@ -32,28 +34,29 @@
         data: function () {
             return {
                 visible: false,
-                uploadFiles: [],
-                brobUrls: []
+                data: [],
             }
         },
         methods: {
             selectedFile: function (e) {
-                // 選択された File の情報を保存しておく
                 e.preventDefault();
                 let files = e.target.files;
-                this.uploadFiles = files;
-                let brobUrls = [];
-                for(let i = 0; i < this.uploadFiles.length; i++) {
-                    const blobUrl = window.URL.createObjectURL(this.uploadFiles[i]);
-                    brobUrls.push(blobUrl);
+                // this.uploadFiles = files;
+                let data = [];
+                for(let i = 0; i < files.length; i++) {
+                    const file = files[i]
+                    const brobUrl = window.URL.createObjectURL(file);
+                    const result = "";
+                    data.push({file, brobUrl, result});
                 }
-                this.brobUrls = brobUrls;
+                this.data = data;
             },
             upload: function () {
+
                 // FormData を利用して File を POST する
                 let formData = new FormData();
-                for(let i = 0; i < this.uploadFiles.length; i++) {
-                    formData.append('image-' + String(i), this.uploadFiles[i]);
+                for(let i = 0; i < this.data.length; i++) {
+                    formData.append('image-' + String(i), this.data[i].file);
                 }
 
                 let config = {
@@ -61,13 +64,18 @@
                         'content-type': 'multipart/form-data'
                     }
                 };
+
+                vm = this
                 axios
                     .post('http://localhost:8080', formData, config)
                     .then(function (response) {
-                        // response 処理
+                        for(let i = 0; i < response.data.length; i++) {
+                            vm.data[i].result = response.data[0].result.FaceDetails;
+                        }
+                        console.log(vm.data)
                     })
                     .catch(function (error) {
-                        // error 処理
+                        console.log(error);
                     })
             }
         }
