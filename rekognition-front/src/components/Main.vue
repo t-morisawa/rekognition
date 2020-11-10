@@ -16,8 +16,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
     name: 'Main',
     data: function () {
@@ -56,7 +54,7 @@ export default {
             };
 
             let vm = this
-            axios
+            this.$axios
                 .post('http://localhost:8080', formData, config)
                 .then(function (response) {
                     for(let i = 0; i < response.data.length; i++) {
