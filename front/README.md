@@ -1,4 +1,4 @@
-# rekognition-front
+# front
 
 ## Project setup
 ```
