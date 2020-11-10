@@ -1,5 +1,11 @@
 # 顔認識
 
+# Webサーバ
+
+```
+$ docker-compose up --build
+```
+
 # Pythonコンソール
 
 ## 環境構築
@@ -28,17 +34,3 @@ Pythonプログラムを実行
 python src/rekognition.py images/sample.jpg
 ```
 
-# Webサーバ
-
-```
-docker build -t rekognition-web -f Dockerfile-web .
-docker run -p 8080:8080 -v $(pwd)/web:/app rekognition-web
-```
-
-# Webページ
-
-`front/index.html` をブラウザで開く
-
-```
-open front/index.html
-```
