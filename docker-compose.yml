@@ -1,0 +1,21 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-web
+    ports:
+     - "8080:8080"
+    volumes:
+     - ./web:/app
+    environment:
+      - ENV=local
+  front:
+    build:
+      context: .
+      dockerfile: Dockerfile-front
+    volumes:
+      - ./front:/app
+    ports:
+      - 3000:3000
+    command: npm run serve
