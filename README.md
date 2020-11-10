@@ -6,6 +6,8 @@
 $ docker-compose up --build
 ```
 
+http://localhost:3000
+
 # Pythonコンソール
 
 ## 環境構築
