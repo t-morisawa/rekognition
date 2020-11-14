@@ -1,16 +1,20 @@
 <template>
     <div>
-        <el-button @click="visible = true">Button</el-button>
-        <el-dialog :visible.sync="visible" title="Hello world">
-            <p>Try Element</p>
-        </el-dialog>
         <form>
-            <input @change="selectedFile" type="file" name="file" multiple>
-            <el-button @click="upload" type="submit">file upload</el-button>
+            <label>
+                <input @change="selectedFile" type="file" name="file" multiple style="display:none;">
+                <span class="upload">file upload</span>
+            </label>
+            <el-button @click="upload" type="submit">submit</el-button>
         </form>
-        <div v-for="datum in data" v-bind:key="datum.id">
-            <img :src="datum.brobUrl" height="200">
-            <p v-if="datum.result">{{ datum.result[0].AgeRange.Low }} - {{ datum.result[0].AgeRange.High }}</p>
+        <div class="image-container">
+            <div v-for="datum in data" v-bind:key="datum.id">
+               <el-image 
+                :src="datum.brobUrl"
+                style="width: 200px; height: 200px"
+                fit="contain"></el-image>
+                <p v-if="datum.result">{{ datum.result[0].AgeRange.Low }} - {{ datum.result[0].AgeRange.High }}</p>
+            </div>
         </div>
     </div>
 </template>
@@ -20,7 +24,6 @@ export default {
     name: 'Main',
     data: function () {
         return {
-            visible: false,
             data: [],
         }
     },
@@ -69,3 +72,20 @@ export default {
     }
 }
 </script>
+<style scoped>
+.image-container {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.upload {
+    margin-right: 20px;
+}
+
+.upload:hover {
+    color: #409EFF;
+}
+</style>
