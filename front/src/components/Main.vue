@@ -1,12 +1,11 @@
 <template>
     <div>
-        <el-button @click="visible = true">Button!</el-button>
-        <el-dialog :visible.sync="visible" title="Hello world">
-            <p>Try Element</p>
-        </el-dialog>
         <form>
-            <input @change="selectedFile" type="file" name="file" multiple>
-            <el-button @click="upload" type="submit">file upload</el-button>
+            <label>
+                <input @change="selectedFile" type="file" name="file" multiple style="display:none;">
+                <span class="upload">file upload</span>
+            </label>
+            <el-button @click="upload" type="submit">submit</el-button>
         </form>
         <div class="image-container">
             <div v-for="datum in data" v-bind:key="datum.id">
@@ -25,7 +24,6 @@ export default {
     name: 'Main',
     data: function () {
         return {
-            visible: false,
             data: [],
         }
     },
@@ -81,5 +79,13 @@ export default {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
+}
+
+.upload {
+    margin-right: 20px;
+}
+
+.upload:hover {
+    color: #409EFF;
 }
 </style>
