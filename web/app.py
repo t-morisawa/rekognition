@@ -3,8 +3,8 @@ import reprlib
 import aioboto3
 import json
 import asyncio
-import requests
-from ..twitter import twitter
+#import requests
+#from ..twitter import twitter
 
 api = responder.API(cors=True, cors_params={
     'allow_origins': ['*'],
@@ -40,6 +40,7 @@ async def hello_world(req, resp):
     #print(data["image"])
     #resp.text = str(data["image"]["filename"])
 
+"""
 @api.route("/twitter")
 async def hell_world(req, resp):
 
@@ -57,6 +58,7 @@ async def hell_world(req, resp):
 
     #print(data["image"])
     #resp.text = str(data["image"]["filename"])
+"""
 
 class FaceDetector:
     """
