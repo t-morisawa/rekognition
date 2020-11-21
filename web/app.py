@@ -4,7 +4,7 @@ import aioboto3
 import json
 import asyncio
 import requests
-from ..twitter import twitter
+import twitter
 
 api = responder.API(cors=True, cors_params={
     'allow_origins': ['*'],
@@ -29,7 +29,7 @@ async def hello_world(req, resp):
     # resp.media = {'filename': str(data["image"]["filename"])}
     #filename = []
     #for v in data.values():
-         #filename.append({'filename': v["filename"]})
+    #filename.append({'filename': v["filename"]})
 
     detectfaces = FaceDetector()
     await detectfaces.detect(data)
@@ -40,14 +40,13 @@ async def hello_world(req, resp):
     #print(data["image"])
     #resp.text = str(data["image"]["filename"])
 
-@api.route("/twitter")
-async def hell_world(req, resp):
 
-    getTwitterImage = twitter.GetTwitterImage()
-    image_url = getTwitterImage.get_imge_url(await req.text())
+@api.route("/twitter/{accountName}")
+async def hell_world(req, resp, *, accountName):
+    detectfaces = FaceDetector()
+    await detectfaces.tweet_Image(accountName)
 
-    response = requests.get(image_url[0])
-
+    """
     print(reprlib.repr(response))
     detectfaces = FaceDetector()
     await detectfaces.detect(response)
@@ -57,6 +56,9 @@ async def hell_world(req, resp):
 
     #print(data["image"])
     #resp.text = str(data["image"]["filename"])
+    """
+    resp.media = detectfaces.get_result()
+
 
 class FaceDetector:
     """
@@ -95,6 +97,22 @@ class FaceDetector:
                         aws_secret_access_key=AWS_PROFILES['AWS_SECRET_ACCESS_KEY'],
         ) as client:
             await asyncio.gather(*[self.__single(key, value["filename"], value["content"], client) for key, value in data.items()])
+
+    async def tweet_Image(self, accountName):
+        """
+        顔認証メソッド
+
+        :param list image_files ファイル名のリスト
+        """
+        getTwitterImage = twitter.GetTweetImage()
+        imageUrl = getTwitterImage.get_imge_url(accountName)
+
+        async with aioboto3.client('rekognition',
+                        region_name=AWS_PROFILES['AWS_DEFAULT_REGION'],
+                        aws_access_key_id=AWS_PROFILES['AWS_ACCESS_KEY_ID'],
+                        aws_secret_access_key=AWS_PROFILES['AWS_SECRET_ACCESS_KEY'],
+        ) as client:
+            await asyncio.gather(*[self.__single(url, requests.get(url).content, client) for url in imageUrl])
 
     def get_result(self):
         return self.result
