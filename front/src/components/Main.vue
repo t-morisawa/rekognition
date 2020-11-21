@@ -42,9 +42,9 @@ export default {
         },
         upload: function () {
             let formData = new FormData();
-            for(let i = 0; i < this.data.length; i++) {
-                formData.append(this.data[i].key, this.data[i].file);
-            }
+            this.data.forEach( datum => {
+                formData.append(datum.key, datum.file);
+            })
 
             let config = {
                 headers: {
