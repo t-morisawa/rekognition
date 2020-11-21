@@ -1,16 +1,19 @@
 <template>
   <div id="app">
     <Main />
+    <Twitter />
   </div>
 </template>
 
 <script>
 import Main from './components/Main.vue'
+import Twitter from './components/Twitter.vue'
 
 export default {
   name: 'App',
   components: {
-    Main
+    Main,
+    Twitter,
   }
 }
 </script>
