@@ -1,10 +1,10 @@
 import tweepy
 import requests
 
-consumer_key = '***'
-consumer_secret = '***'
-access_token = '***'
-access_token_secret = '***'
+consumer_key = 'GmcKASG6OvocBPWGoGvvXqn1g'
+consumer_secret = '0OvnaVOWIwLgLujpM6AYzVY7hKWFJzILuvfYwCGmJiSLRauTur'
+access_token = '1128263296006512642-j9xkJezcoHEjxhbLm3PlHt9TrVOib4'
+access_token_secret = 'mtm7zJBq7ysW5FmgkT9DcXc95PPCBTcaZTEFfabePiXBF'
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
@@ -33,21 +33,19 @@ class GetTweetImage:
         #key_account = input('Enter account name:')
         #count_no = int(input('Set search count:'))
         #search_results = tweepy.Cursor(api.user_timeline, screen_name=key_account).items(count_no)
-        search_results = tweepy.Cursor(api.user_timeline, screen_name=accountName).items(20)
+        search_results = tweepy.Cursor(api.user_timeline, screen_name=accountName, include_rts=False).items(100)
 
         for result in search_results:
-            try:
+            if hasattr(result, 'extended_entities'):
                 self.img_url.append(result.extended_entities['media'][0]['media_url'])
-                #print(img_url)
-            except:
-                pass
-
-            
+                print(str(self.img_url))
+        
         #画像の数だけ処理する必要あり
-        response = requests.get(self.img_url[0])
+        #response = requests.get(self.img_url[0])
 
-        print(type(response.content))
-    #return response.content
+        #print(response.content)
+        #return response.content
+        return self.img_url
 
 if __name__ == '__main__':
     g = GetTweetImage()
