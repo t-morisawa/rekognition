@@ -35,10 +35,11 @@ export default {
             let data = [];
             for(let i = 0; i < files.length; i++) {
                 const id = i;
+                const key = 'image-' + String(i);
                 const file = files[i];
                 const brobUrl = window.URL.createObjectURL(file);
                 const result = "";
-                data.push({id, file, brobUrl, result});
+                data.push({id, key, file, brobUrl, result});
             }
             this.data = data;
         },
@@ -47,7 +48,7 @@ export default {
             // FormData を利用して File を POST する
             let formData = new FormData();
             for(let i = 0; i < this.data.length; i++) {
-                formData.append('image-' + String(i), this.data[i].file);
+                formData.append(this.data[i].key, this.data[i].file);
             }
 
             let config = {
@@ -60,8 +61,8 @@ export default {
             this.$axios
                 .post('http://localhost:8080', formData, config)
                 .then(function (response) {
-                    for(let i = 0; i < response.data.length; i++) {
-                        vm.data[i].result = response.data[i].result.FaceDetails;
+                    for(let i = 0; i < vm.data.length; i++) {
+                        vm.data[i].result = response.data[vm.data[i].key].result.FaceDetails;
                     }
                     console.log(vm.data)
                 })

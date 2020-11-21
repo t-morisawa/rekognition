@@ -46,9 +46,9 @@ class FaceDetector:
     await FaceDetector().detect(image_files)
     """    
     def __init__(self):
-        self.result = []
+        self.result = {}
 
-    async def __single(self, filename, imgae_binary, client):
+    async def __single(self, image_num, filename, imgae_binary, client):
         result = await client.detect_faces(
             Image={
                 'Bytes': imgae_binary,
@@ -58,7 +58,8 @@ class FaceDetector:
             ]
         )
 
-        self.result.append({"filename":filename, "result":result})
+        
+        self.result[image_num] = {"filename":filename, "result":result}
         print("finished: " + filename)
         #print(len(result['FaceDetails']))
 
@@ -73,7 +74,7 @@ class FaceDetector:
                         aws_access_key_id=AWS_PROFILES['AWS_ACCESS_KEY_ID'],
                         aws_secret_access_key=AWS_PROFILES['AWS_SECRET_ACCESS_KEY'],
         ) as client:
-            await asyncio.gather(*[self.__single(value["filename"], value["content"], client) for value in data.values()])
+            await asyncio.gather(*[self.__single(key, value["filename"], value["content"], client) for key, value in data.items()])
 
     def get_result(self):
         return self.result
