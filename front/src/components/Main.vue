@@ -8,7 +8,7 @@
             <el-button @click="upload" type="submit">submit</el-button>
         </form>
         <div class="image-container">
-            <div v-for="datum in data" v-bind:key="datum.id">
+            <div v-for="datum in data" v-bind:key="datum.key">
                <el-image 
                 :src="datum.brobUrl"
                 style="width: 200px; height: 200px"
@@ -31,21 +31,16 @@ export default {
         selectedFile: function (e) {
             e.preventDefault();
             let files = e.target.files;
-            // this.uploadFiles = files;
             let data = [];
-            for(let i = 0; i < files.length; i++) {
-                const id = i;
-                const key = 'image-' + String(i);
-                const file = files[i];
+            files.forEach((file, index) => {
+                const key = 'image-' + String(index);
                 const brobUrl = window.URL.createObjectURL(file);
                 const result = "";
-                data.push({id, key, file, brobUrl, result});
-            }
+                data.push({key, file, brobUrl, result});
+            });
             this.data = data;
         },
         upload: function () {
-
-            // FormData を利用して File を POST する
             let formData = new FormData();
             for(let i = 0; i < this.data.length; i++) {
                 formData.append(this.data[i].key, this.data[i].file);
