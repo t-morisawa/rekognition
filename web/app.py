@@ -3,6 +3,8 @@ import reprlib
 import aioboto3
 import json
 import asyncio
+import requests
+from ..twitter import twitter
 
 api = responder.API(cors=True, cors_params={
     'allow_origins': ['*'],
@@ -31,6 +33,24 @@ async def hello_world(req, resp):
 
     detectfaces = FaceDetector()
     await detectfaces.detect(data)
+    print(detectfaces.get_result())
+
+    resp.media = detectfaces.get_result()
+
+    #print(data["image"])
+    #resp.text = str(data["image"]["filename"])
+
+@api.route("/twitter")
+async def hell_world(req, resp):
+
+    getTwitterImage = twitter.GetTwitterImage()
+    image_url = getTwitterImage.get_imge_url(await req.text())
+
+    response = requests.get(image_url[0])
+
+    print(reprlib.repr(response))
+    detectfaces = FaceDetector()
+    await detectfaces.detect(response)
     print(detectfaces.get_result())
 
     resp.media = detectfaces.get_result()
