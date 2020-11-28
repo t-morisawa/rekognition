@@ -1,7 +1,21 @@
 <template>
   <div id="app">
-    <Main />
-    <Twitter />
+    <div class="mb5">
+      <el-switch
+        v-model="value"
+        inactive-color="#13ce66"
+        active-value="twitter"
+        inactive-value="file"
+        active-text="Twitter"
+        inactive-text="File Upload">
+      </el-switch>
+    </div>
+    <div v-if="value == 'file'">
+      <Main />
+    </div>
+    <div v-if="value == 'twitter'">
+      <Twitter />
+    </div>
   </div>
 </template>
 
@@ -14,6 +28,11 @@ export default {
   components: {
     Main,
     Twitter,
+  },
+  data() {
+    return {
+      value: 'twitter'
+    }
   }
 }
 </script>
@@ -26,5 +45,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.mb5 {
+  margin-bottom: 50px;
 }
 </style>
