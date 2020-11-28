@@ -112,7 +112,7 @@ class FaceDetector:
                         aws_access_key_id=AWS_PROFILES['AWS_ACCESS_KEY_ID'],
                         aws_secret_access_key=AWS_PROFILES['AWS_SECRET_ACCESS_KEY'],
         ) as client:
-            await asyncio.gather(*[self.__single(url, requests.get(url).content, client) for url in imageUrl])
+            await asyncio.gather(*[self.__single(url, url, requests.get(url).content, client) for url in imageUrl])
 
     def get_result(self):
         return self.result
