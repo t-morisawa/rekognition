@@ -8,6 +8,10 @@ $ docker-compose up --build
 
 http://localhost:3000
 
+# 参考文献
+
+ - Element UI https://element.ele.me/#/en-US/component/installation
+
 # Pythonコンソール
 
 ## 環境構築
