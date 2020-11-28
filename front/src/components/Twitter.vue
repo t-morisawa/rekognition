@@ -1,7 +1,7 @@
 <template>
     <div>
-        <el-form class="form">
-            <el-input placeholder="TwitterJP" v-model="input" :disabled="isSubmitting"></el-input>
+        <el-form class="form" @submit.native.prevent>
+            <el-input placeholder="TwitterJP" v-model="input"></el-input>
             <el-button @click="submit">submit</el-button>
         </el-form>
         <div class="image-container">
