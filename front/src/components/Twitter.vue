@@ -1,9 +1,9 @@
 <template>
     <div>
-        <form>
-            <el-input placeholder="TwitterJP" v-model="input"></el-input>
-            <el-button @click="submit" type="submit">submit</el-button>
-        </form>
+        <el-form class="form">
+            <el-input placeholder="TwitterJP" v-model="input" :disabled="isSubmitting"></el-input>
+            <el-button @click="submit">submit</el-button>
+        </el-form>
         <div class="image-container">
             <div v-for="datum in data" v-bind:key="datum.img_url">
                <el-image 
@@ -71,5 +71,10 @@ export default {
 
 .upload:hover {
     color: #409EFF;
+}
+
+.form {
+    max-width: 720px;
+    margin: 0 auto;
 }
 </style>
