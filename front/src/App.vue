@@ -7,7 +7,8 @@
         active-value="TWITTER"
         inactive-value="FILE"
         active-text="Twitter"
-        inactive-text="File Upload">
+        inactive-text="File Upload"
+      >
       </el-switch>
     </div>
     <div v-if="value == 'FILE'">
@@ -20,21 +21,21 @@
 </template>
 
 <script>
-import FileUpload from './components/FileUpload.vue'
-import Twitter from './components/Twitter.vue'
+import FileUpload from "./components/FileUpload.vue";
+import Twitter from "./components/Twitter.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     FileUpload,
     Twitter,
   },
   data() {
     return {
-      value: 'TWITTER'
-    }
-  }
-}
+      value: "TWITTER",
+    };
+  },
+};
 </script>
 
 <style>
