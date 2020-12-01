@@ -4,37 +4,38 @@
       <el-switch
         v-model="value"
         inactive-color="#13ce66"
-        active-value="twitter"
-        inactive-value="file"
+        active-value="TWITTER"
+        inactive-value="FILE"
         active-text="Twitter"
-        inactive-text="File Upload">
+        inactive-text="File Upload"
+      >
       </el-switch>
     </div>
-    <div v-if="value == 'file'">
-      <Main />
+    <div v-if="value == 'FILE'">
+      <FileUpload />
     </div>
-    <div v-if="value == 'twitter'">
+    <div v-if="value == 'TWITTER'">
       <Twitter />
     </div>
   </div>
 </template>
 
 <script>
-import Main from './components/Main.vue'
-import Twitter from './components/Twitter.vue'
+import FileUpload from "./components/FileUpload.vue";
+import Twitter from "./components/Twitter.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    Main,
+    FileUpload,
     Twitter,
   },
   data() {
     return {
-      value: 'twitter'
-    }
-  }
-}
+      value: "TWITTER",
+    };
+  },
+};
 </script>
 
 <style>
