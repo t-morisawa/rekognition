@@ -4,16 +4,16 @@
       <el-switch
         v-model="value"
         inactive-color="#13ce66"
-        active-value="twitter"
-        inactive-value="file"
+        active-value="TWITTER"
+        inactive-value="FILE"
         active-text="Twitter"
         inactive-text="File Upload">
       </el-switch>
     </div>
-    <div v-if="value == 'file'">
+    <div v-if="value == 'FILE'">
       <FileUpload />
     </div>
-    <div v-if="value == 'twitter'">
+    <div v-if="value == 'TWITTER'">
       <Twitter />
     </div>
   </div>
@@ -31,7 +31,7 @@ export default {
   },
   data() {
     return {
-      value: 'twitter'
+      value: 'TWITTER'
     }
   }
 }
