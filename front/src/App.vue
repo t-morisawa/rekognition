@@ -11,7 +11,7 @@
       </el-switch>
     </div>
     <div v-if="value == 'file'">
-      <Main />
+      <FileUpload />
     </div>
     <div v-if="value == 'twitter'">
       <Twitter />
@@ -20,13 +20,13 @@
 </template>
 
 <script>
-import Main from './components/Main.vue'
+import FileUpload from './components/FileUpload.vue'
 import Twitter from './components/Twitter.vue'
 
 export default {
   name: 'App',
   components: {
-    Main,
+    FileUpload,
     Twitter,
   },
   data() {
