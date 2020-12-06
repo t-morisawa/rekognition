@@ -5,10 +5,10 @@
 ## 環境構築
 
 ```
-cp .env.example .env
+cp config.example.json config.json
 ```
 
-.envにAWSとTwitterのアクセスキー・アクセスシークレットを記入
+config.jspnにAWSとTwitterのアクセスキー・アクセスシークレットを記入
 
 ## 起動
 
