@@ -41,8 +41,10 @@ class GetTweetImage:
 
         for result in search_results:
             if hasattr(result, 'extended_entities'):
-                self.img_url.append(result.extended_entities['media'][0]['media_url'])
-                print(str(self.img_url))
+                for photo in result.extended_entities['media']:
+                    self.img_url.append(photo['media_url'])
+                    #self.img_url.append(result.extended_entities['media'][0]['media_url'])
+                    print(str(self.img_url))
         
         #画像の数だけ処理する必要あり
         #response = requests.get(self.img_url[0])
