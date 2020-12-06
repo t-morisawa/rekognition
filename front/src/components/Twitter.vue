@@ -56,6 +56,12 @@ export default {
             }
           }, res);
           vm.loading = false;
+          if (vm.data.length == 0) {
+            vm.$message({
+              message: '認識できる顔画像が見つかりませんでした',
+              type: 'warning'
+            });
+          }
         })
         .catch(function (error) {
           console.log(error);
