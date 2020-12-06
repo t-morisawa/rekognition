@@ -7,7 +7,11 @@
       ></el-input>
       <el-button @click="submit">submit</el-button>
     </el-form>
-    <div class="image-container">
+    <div class="image-container"
+      v-loading="loading"
+      element-loading-text=""
+      element-loading-spinner="el-icon-loading"      
+    >
       <div v-for="datum in data" v-bind:key="datum.img_url">
         <el-image
           :src="datum.img_url"
@@ -30,32 +34,33 @@ export default {
     return {
       input: "",
       data: [],
+      loading: false,
     };
   },
   methods: {
     submit: function () {
+      this.loading = true;
+      this.data = [];
       const vm = this;
       this.$axios
         .get("http://localhost:8080/twitter/" + this.input)
         .then(function (response) {
-          // response.data.forEach(datum => {
-          //     vm.data.push({
-          //         "filename": datum.img_url,
-          //         "result": datum.result.FaceDetails,
-          //     });
-          // });
           const res = response.data;
           Object.keys(res).forEach(function (key) {
             var datum = this[key];
-            vm.data.push({
-              img_url: datum.filename,
-              result: datum.result.FaceDetails,
-            });
+            if (datum.result.FaceDetails.length > 0) {
+              vm.data.push({
+                img_url: datum.filename,
+                result: datum.result.FaceDetails,
+              });
+            }
           }, res);
-          console.log(vm.data);
+          vm.loading = false;
         })
         .catch(function (error) {
           console.log(error);
+          vm.loading = false;
+          vm.$message.error('エラーが発生しました');
         });
     },
   },
@@ -68,6 +73,7 @@ export default {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
+  margin-top: 20px;
 }
 
 .upload {
