@@ -1,5 +1,5 @@
 venv
 aws.json
-.env
+config.json
 .DS_Store
 *.pyc

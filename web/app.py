@@ -5,7 +5,6 @@ import json
 import asyncio
 import requests
 import twitter
-import os
 
 api = responder.API(cors=True, cors_params={
     'allow_origins': ['*'],
@@ -13,11 +12,8 @@ api = responder.API(cors=True, cors_params={
     'allow_headers': ['*'],
 })
 
-AWS_PROFILES = {}
-AWS_PROFILES['AWS_DEFAULT_REGION'] = os.getenv('AWS_DEFAULT_REGION')
-AWS_PROFILES['AWS_ACCESS_KEY_ID'] = os.getenv('AWS_ACCESS_KEY_ID')
-AWS_PROFILES['AWS_SECRET_ACCESS_KEY'] = os.getenv('AWS_SECRET_ACCESS_KEY')
-
+with open("config.json", "r") as f:
+    CONFIG = json.load(f)
 
 @api.route("/")
 async def hello_world(req, resp):
@@ -96,9 +92,9 @@ class FaceDetector:
         :param list image_files ファイル名のリスト
         """
         async with aioboto3.client('rekognition',
-                        region_name=AWS_PROFILES['AWS_DEFAULT_REGION'],
-                        aws_access_key_id=AWS_PROFILES['AWS_ACCESS_KEY_ID'],
-                        aws_secret_access_key=AWS_PROFILES['AWS_SECRET_ACCESS_KEY'],
+                        region_name=CONFIG['AWS_DEFAULT_REGION'],
+                        aws_access_key_id=CONFIG['AWS_ACCESS_KEY_ID'],
+                        aws_secret_access_key=CONFIG['AWS_SECRET_ACCESS_KEY'],
         ) as client:
             await asyncio.gather(*[self.__single(key, value["filename"], value["content"], client) for key, value in data.items()])
 
@@ -112,9 +108,9 @@ class FaceDetector:
         imageUrl = getTwitterImage.get_imge_url(accountName)
 
         async with aioboto3.client('rekognition',
-                        region_name=AWS_PROFILES['AWS_DEFAULT_REGION'],
-                        aws_access_key_id=AWS_PROFILES['AWS_ACCESS_KEY_ID'],
-                        aws_secret_access_key=AWS_PROFILES['AWS_SECRET_ACCESS_KEY'],
+                        region_name=CONFIG['AWS_DEFAULT_REGION'],
+                        aws_access_key_id=CONFIG['AWS_ACCESS_KEY_ID'],
+                        aws_secret_access_key=CONFIG['AWS_SECRET_ACCESS_KEY'],
         ) as client:
             await asyncio.gather(*[self.__single(url, url, requests.get(url).content, client) for url in imageUrl])
 
