@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form class="form" @submit.native.prevent>
+    <el-form class="form" @submit.native.prevent="submit">
       <el-input
         placeholder="Input YOUR account name"
         v-model="input"
@@ -39,6 +39,9 @@ export default {
   },
   methods: {
     submit: function () {
+      if (this.loading == true) {
+        return
+      }
       this.loading = true;
       this.data = [];
       const vm = this;
@@ -55,7 +58,6 @@ export default {
               });
             }
           }, res);
-          vm.loading = false;
           if (vm.data.length == 0) {
             vm.$message({
               message: '認識できる顔画像が見つかりませんでした',
@@ -65,8 +67,10 @@ export default {
         })
         .catch(function (error) {
           console.log(error);
-          vm.loading = false;
           vm.$message.error('エラーが発生しました');
+        })
+        .finally(() => {
+          vm.loading = false;
         });
     },
   },
