@@ -5,6 +5,7 @@ import json
 import asyncio
 import requests
 import twitter
+import aiohttp
 
 api = responder.API(cors=True, cors_params={
     'allow_origins': ['*'],
@@ -107,12 +108,22 @@ class FaceDetector:
         getTwitterImage = twitter.GetTweetImage()
         imageUrl = getTwitterImage.get_imge_url(accountName)
 
+        # URLの配列 => URLとバイナリの辞書の配列
+        images = []
+        async def request(url, session):
+            async with session.get(url) as response:
+                content = await response.read()
+                images.append({'url': url, 'content': content})
+
+        async with aiohttp.ClientSession() as session:
+            await asyncio.gather(*[request(url, session) for url in imageUrl])
+
         async with aioboto3.client('rekognition',
                         region_name=CONFIG['AWS_DEFAULT_REGION'],
                         aws_access_key_id=CONFIG['AWS_ACCESS_KEY_ID'],
                         aws_secret_access_key=CONFIG['AWS_SECRET_ACCESS_KEY'],
         ) as client:
-            await asyncio.gather(*[self.__single(url, url, requests.get(url).content, client) for url in imageUrl])
+            await asyncio.gather(*[self.__single(image['url'], image['url'], image['content'], client) for image in images])
 
     def get_result(self):
         return self.result
