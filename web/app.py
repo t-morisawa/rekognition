@@ -5,6 +5,7 @@ import json
 import asyncio
 import requests
 import twitter
+import os
 
 api = responder.API(cors=True, cors_params={
     'allow_origins': ['*'],
@@ -12,8 +13,11 @@ api = responder.API(cors=True, cors_params={
     'allow_headers': ['*'],
 })
 
-with open("aws.json", "r") as f:
-    AWS_PROFILES = json.load(f)
+AWS_PROFILES = {}
+AWS_PROFILES['AWS_DEFAULT_REGION'] = os.getenv('AWS_DEFAULT_REGION')
+AWS_PROFILES['AWS_ACCESS_KEY_ID'] = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_PROFILES['AWS_SECRET_ACCESS_KEY'] = os.getenv('AWS_SECRET_ACCESS_KEY')
+
 
 @api.route("/")
 async def hello_world(req, resp):
