@@ -5,7 +5,10 @@
         placeholder="Input YOUR account name"
         v-model="input"
       ></el-input>
-      <el-button @click="submit">submit</el-button>
+      <el-button
+        @click="submit"
+        v-bind:disabled="loading"
+      >submit</el-button>
     </el-form>
     <div class="image-container"
       v-loading="loading"
