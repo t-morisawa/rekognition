@@ -32,7 +32,7 @@
 
 <script>
 export default {
-  name: "Main",
+  name: "Twitter",
   data: function () {
     return {
       input: "",
