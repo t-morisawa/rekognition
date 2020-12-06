@@ -2,6 +2,16 @@
 
 # Webサーバ
 
+## 環境構築
+
+```
+cp .env.example .env
+```
+
+.envにAWSとTwitterのアクセスキー・アクセスシークレットを記入
+
+## 起動
+
 ```
 $ docker-compose up --build
 ```

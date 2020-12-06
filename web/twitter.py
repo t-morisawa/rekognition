@@ -1,10 +1,14 @@
 import tweepy
 import requests
+import os
+import json
 
-consumer_key = 'GmcKASG6OvocBPWGoGvvXqn1g'
-consumer_secret = '0OvnaVOWIwLgLujpM6AYzVY7hKWFJzILuvfYwCGmJiSLRauTur'
-access_token = '1128263296006512642-j9xkJezcoHEjxhbLm3PlHt9TrVOib4'
-access_token_secret = 'mtm7zJBq7ysW5FmgkT9DcXc95PPCBTcaZTEFfabePiXBF'
+with open("config.json", "r") as f:
+    CONFIG = json.load(f)
+    consumer_key = CONFIG['TWITTER_CONSUMER_KEY']
+    consumer_secret = CONFIG['TWITTER_CONSUMER_SECRET']
+    access_token = CONFIG['TWITTER_ACCESS_TOKEN']
+    access_token_secret = CONFIG['TWITTER_ACCESS_TOKEN_SECRET']
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
