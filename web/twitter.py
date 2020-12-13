@@ -47,9 +47,6 @@ class TwitterImages:
 
 class GetTweetImage:
 
-    def __init__(self):
-        self.img_url = []
-
     def get_image_url(self, accountName: str) -> List[str]:
         #key_account = input('Enter account name:')
         #count_no = int(input('Set search count:'))
@@ -62,13 +59,7 @@ class GetTweetImage:
                 for photo in result.extended_entities['media']:
                     twitter_image = TwitterImage(photo['media_url'], b'', result.created_at, {})
                     twitter_images_list.append(twitter_image)
-                    self.img_url.append(photo['media_url'])
-                    #self.img_url.append(result.extended_entities['media'][0]['media_url'])
-                    print(str(self.img_url))
         
-        #画像の数だけ処理する必要あり
-        #response = requests.get(self.img_url[0])
-
         #print(response.content)
         #return response.content
         

@@ -123,12 +123,12 @@ class FaceDetector:
                         aws_access_key_id=CONFIG['AWS_ACCESS_KEY_ID'],
                         aws_secret_access_key=CONFIG['AWS_SECRET_ACCESS_KEY'],
         ) as client:
-            await asyncio.gather(*[self.__single(twitter_image.url, twitter_image.url, twitter_image.content, client) for twitter_image in twitter_images.images])
+            await asyncio.gather(*[self.__single(index, twitter_image.url, twitter_image.content, client) for index, twitter_image in enumerate(twitter_images.images)])
         
         # 顔認識の結果を格納
         # TODO あとで直す
-        for twitter_image in twitter_images.images:
-            twitter_image.result = self.result[twitter_image.url]['result']
+        for index, twitter_image in enumerate(twitter_images.images):
+            twitter_image.result = self.result[index]['result']
 
         # 並び替えの処理を入れる
         sorted(twitter_images.images, key=lambda image: image.created_at)
@@ -138,6 +138,6 @@ class FaceDetector:
         self.result = {}
         for index, twitter_image in enumerate(twitter_images.images):
             self.result[index] = {"filename":twitter_image.url, "result":twitter_image.result}
-        
+
     def get_result(self):
         return self.result
