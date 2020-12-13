@@ -7,6 +7,7 @@ import requests
 import twitter
 import aiohttp
 
+
 api = responder.API(cors=True, cors_params={
     'allow_origins': ['*'],
     'allow_methods': ['*'],
@@ -17,7 +18,7 @@ with open("config.json", "r") as f:
     CONFIG = json.load(f)
 
 @api.route("/")
-async def hello_world(req, resp):
+async def file_api(req, resp):
 
     data = await req.media(format='files')
 
@@ -43,7 +44,7 @@ async def hello_world(req, resp):
 
 
 @api.route("/twitter/{accountName}")
-async def hell_world(req, resp, *, accountName):
+async def twitter_api(req, resp, *, accountName):
     detectfaces = FaceDetector()
     await detectfaces.tweet_Image(accountName)
 
@@ -105,25 +106,38 @@ class FaceDetector:
 
         :param list image_files ファイル名のリスト
         """
-        getTwitterImage = twitter.GetTweetImage()
-        imageUrl = getTwitterImage.get_imge_url(accountName)
+        # 画像URLの取得
+        twitter_images = twitter.GetTweetImage().get_image_url(accountName)
 
-        # URLの配列 => URLとバイナリの辞書の配列
-        images = []
-        async def request(url, session):
-            async with session.get(url) as response:
-                content = await response.read()
-                images.append({'url': url, 'content': content})
+        # 画像の取得
+        async def request_image(twitter_image: twitter.TwitterImage, session: aiohttp.ClientSession):
+            async with session.get(twitter_image.url) as response:
+                twitter_image.content = await response.read()
 
         async with aiohttp.ClientSession() as session:
-            await asyncio.gather(*[request(url, session) for url in imageUrl])
+            await asyncio.gather(*[request_image(twitter_image, session) for twitter_image in twitter_images.images])
 
+        # 顔認識
         async with aioboto3.client('rekognition',
                         region_name=CONFIG['AWS_DEFAULT_REGION'],
                         aws_access_key_id=CONFIG['AWS_ACCESS_KEY_ID'],
                         aws_secret_access_key=CONFIG['AWS_SECRET_ACCESS_KEY'],
         ) as client:
-            await asyncio.gather(*[self.__single(image['url'], image['url'], image['content'], client) for image in images])
+            await asyncio.gather(*[self.__single(twitter_image.url, twitter_image.url, twitter_image.content, client) for twitter_image in twitter_images.images])
+        
+        # 顔認識の結果を格納
+        # TODO あとで直す
+        for twitter_image in twitter_images.images:
+            twitter_image.result = self.result[twitter_image.url]['result']
 
+        # 並び替えの処理を入れる
+        sorted(twitter_images.images, key=lambda image: image.created_at)
+
+        # 結果を生成する
+        # TODO あとで直す
+        self.result = {}
+        for index, twitter_image in enumerate(twitter_images.images):
+            self.result[index] = {"filename":twitter_image.url, "result":twitter_image.result}
+        
     def get_result(self):
         return self.result
