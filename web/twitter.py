@@ -2,6 +2,9 @@ import tweepy
 import requests
 import os
 import json
+from dataclasses import dataclass
+from datetime import datetime
+from typing import List
 
 with open("config.json", "r") as f:
     CONFIG = json.load(f)
@@ -28,31 +31,42 @@ for result in search_results:
         pass
 """
 
+
+@dataclass
+class TwitterImage:
+    url: str
+    content: bytes
+    created_at: datetime
+    result: dict
+
+
+@dataclass
+class TwitterImages:
+    images: List[TwitterImage]
+
+
 class GetTweetImage:
 
-    def __init__(self):
-        self.img_url = []
-
-    def get_imge_url(self, accountName):
+    def get_image_url(self, accountName: str) -> List[str]:
         #key_account = input('Enter account name:')
         #count_no = int(input('Set search count:'))
         #search_results = tweepy.Cursor(api.user_timeline, screen_name=key_account).items(count_no)
         search_results = tweepy.Cursor(api.user_timeline, screen_name=accountName, include_rts=False).items(100)
 
+        twitter_images_list = []
         for result in search_results:
             if hasattr(result, 'extended_entities'):
                 for photo in result.extended_entities['media']:
-                    self.img_url.append(photo['media_url'])
-                    #self.img_url.append(result.extended_entities['media'][0]['media_url'])
-                    print(str(self.img_url))
+                    twitter_image = TwitterImage(photo['media_url'], b'', result.created_at, {})
+                    twitter_images_list.append(twitter_image)
         
-        #画像の数だけ処理する必要あり
-        #response = requests.get(self.img_url[0])
-
         #print(response.content)
         #return response.content
-        return self.img_url
+        
+        twitter_images = TwitterImages(twitter_images_list)
+        print(twitter_images)
+        return twitter_images
 
 if __name__ == '__main__':
     g = GetTweetImage()
-    g.get_imge_url("pikarox1")
+    g.get_image_url("pikarox1")
