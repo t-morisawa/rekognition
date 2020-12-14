@@ -3,7 +3,6 @@ import reprlib
 import aioboto3
 import json
 import asyncio
-import requests
 import twitter
 import aiohttp
 
