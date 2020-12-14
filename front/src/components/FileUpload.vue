@@ -66,8 +66,8 @@ export default {
       this.$axios
         .post("http://localhost:8080", formData, config)
         .then(function (response) {
-          vm.data.forEach((datum) => {
-            datum.result = response.data[datum.key].result.FaceDetails;
+          vm.data.forEach((datum, index) => {
+            datum.result = response.data[index].result.FaceDetails;
           });
           console.log(vm.data);
         })

@@ -5,6 +5,8 @@ import json
 import asyncio
 import twitter
 import aiohttp
+from dataclasses import dataclass
+from typing import List
 
 
 api = responder.API(cors=True, cors_params={
@@ -16,30 +18,45 @@ api = responder.API(cors=True, cors_params={
 with open("config.json", "r") as f:
     CONFIG = json.load(f)
 
+
+@dataclass
+class FileImage:
+    key: str
+    content: bytes
+    result: dict
+
+
+@dataclass
+class FileImages:
+    images: List[FileImage]
+
+
 @api.route("/")
 async def file_api(req, resp):
 
     data = await req.media(format='files')
 
-    #f = open('./{}'.format(data['file']['filename']), 'w')
-    #f.write(data['file']['content'].decode('utf-8'))
-    #f.close()
+    # データ生成
+    file_images_list = []
+    for key, value in data.items():
+        file_image = FileImage(key, value['content'], {})
+        file_images_list.append(file_image)
+    file_images = FileImages(file_images_list)
 
+    # 顔認識    
     print(reprlib.repr(data))
-
-    # resp.media = {'filename': str(data["image"]["filename"])}
-    #filename = []
-    #for v in data.values():
-    #filename.append({'filename': v["filename"]})
-
     detectfaces = FaceDetector()
-    await detectfaces.detect(data)
-    print(detectfaces.get_result())
+    await detectfaces.detect(file_images)
 
-    resp.media = detectfaces.get_result()
+    # 結果を格納
+    for index, item in detectfaces.result.items():  # TODO detectfaces.resultではなく, file_imagesに結果を入れたい
+        file_images.images[index].result = item['result']
 
-    #print(data["image"])
-    #resp.text = str(data["image"]["filename"])
+    results = []
+    for image in file_images.images:
+        results.append({'result': image.result})
+
+    resp.media = results
 
 
 @api.route("/twitter/{accountName}")
@@ -86,7 +103,7 @@ class FaceDetector:
         print("finished: " + filename)
         #print(len(result['FaceDetails']))
 
-    async def detect(self, data):
+    async def detect(self, data: FileImages):
         """
         顔認証メソッド
 
@@ -97,7 +114,7 @@ class FaceDetector:
                         aws_access_key_id=CONFIG['AWS_ACCESS_KEY_ID'],
                         aws_secret_access_key=CONFIG['AWS_SECRET_ACCESS_KEY'],
         ) as client:
-            await asyncio.gather(*[self.__single(key, value["filename"], value["content"], client) for key, value in data.items()])
+            await asyncio.gather(*[self.__single(index, image.key, image.content, client) for index, image in enumerate(data.images)])
 
     async def tweet_Image(self, accountName):
         """
