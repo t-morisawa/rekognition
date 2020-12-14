@@ -54,15 +54,16 @@ class GetTweetImage:
         search_results = tweepy.Cursor(api.user_timeline, screen_name=accountName, include_rts=False).items(100)
 
         twitter_images_list = []
-        for result in search_results:
-            if hasattr(result, 'extended_entities'):
-                for photo in result.extended_entities['media']:
-                    twitter_image = TwitterImage(photo['media_url'], b'', result.created_at, {})
-                    twitter_images_list.append(twitter_image)
-        
-        #print(response.content)
-        #return response.content
-        
+        try:
+            for result in search_results:
+                if hasattr(result, 'extended_entities'):  # 画像ツイート
+                    for photo in result.extended_entities['media']:
+                        twitter_image = TwitterImage(photo['media_url'], b'', result.created_at, {})
+                        twitter_images_list.append(twitter_image)
+        except tweepy.error.TweepError:
+            # 画像取得タイムアウト例外
+            pass
+
         twitter_images = TwitterImages(twitter_images_list)
         print(twitter_images)
         return twitter_images
