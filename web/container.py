@@ -35,4 +35,5 @@ class FileResponse:
 
 @dataclass
 class TwitterResponse:
-    pass
+    filename: str
+    result: dict
