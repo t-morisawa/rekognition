@@ -46,5 +46,6 @@ async def file_api(req, resp):
 @api.route("/twitter/{accountName}")
 async def twitter_api(req, resp, *, accountName):
     detectfaces = FaceDetector()
-    await detectfaces.tweet_Image(accountName)
+    twitter_images = twitter.GetTweetImage().get_image_url(accountName)
+    await detectfaces.tweet_Image(twitter_images)
     resp.media = detectfaces.get_result()
