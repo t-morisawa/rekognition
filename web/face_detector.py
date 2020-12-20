@@ -4,23 +4,12 @@ import asyncio
 import twitter
 import aiohttp
 import json
+from typing import List
 from dataclasses import dataclass
-
+from container import FileImages
 
 with open("config.json", "r") as f:
     CONFIG = json.load(f)
-
-
-@dataclass
-class FileImage:
-    key: str
-    content: bytes
-    result: dict
-
-
-@dataclass
-class FileImages:
-    images: List[FileImage]
 
 
 class FaceDetector:
@@ -109,7 +98,7 @@ class FaceDetector:
         # TODO  適当な辞書ではなく、dataclassを定義する
         self.result = {}
         for index, twitter_image in enumerate(twitter_images.images):
-            self.result[index] = {"filename":twitter_image.url, "result":　twitter_image.result}
+            self.result[index] = {"filename": twitter_image.url, "result": twitter_image.result}
 
     def get_result(self):
         return self.result

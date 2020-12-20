@@ -4,6 +4,7 @@ import json
 from dataclasses import dataclass
 from datetime import datetime
 from typing import List
+from container import TwitterImage, TwitterImages
 
 with open("config.json", "r") as f:
     CONFIG = json.load(f)
@@ -29,19 +30,6 @@ for result in search_results:
     except:
         pass
 """
-
-
-@dataclass
-class TwitterImage:
-    url: str
-    content: bytes
-    created_at: datetime
-    result: dict
-
-
-@dataclass
-class TwitterImages:
-    images: List[TwitterImage]
 
 
 class GetTweetImage:

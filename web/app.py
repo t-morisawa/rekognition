@@ -5,7 +5,9 @@ import asyncio
 import twitter
 import aiohttp
 from typing import List
+from dataclasses import dataclass
 from face_detector import FaceDetector
+from container import FileImage, FileImages
 
 
 api = responder.API(cors=True, cors_params={
@@ -13,15 +15,6 @@ api = responder.API(cors=True, cors_params={
     'allow_methods': ['*'],
     'allow_headers': ['*'],
 })
-
-@dataclass
-class FileResponse:
-    pass
-
-
-@dataclass
-class TwitterResponse:
-    pass
 
 
 @api.route("/")
