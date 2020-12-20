@@ -36,7 +36,7 @@ async def file_api(req, resp):
         file_images_list.append(file_image)
     file_images = FileImages(file_images_list)
 
-    # 顔認識    
+    # 顔認識
     print(reprlib.repr(data))
     detectfaces = FaceDetector()
     await detectfaces.detect(file_images)
@@ -54,16 +54,4 @@ async def file_api(req, resp):
 async def twitter_api(req, resp, *, accountName):
     detectfaces = FaceDetector()
     await detectfaces.tweet_Image(accountName)
-
-    """
-    print(reprlib.repr(response))
-    detectfaces = FaceDetector()
-    await detectfaces.detect(response)
-    print(detectfaces.get_result())
-
-    resp.media = detectfaces.get_result()
-
-    #print(data["image"])
-    #resp.text = str(data["image"]["filename"])
-    """
     resp.media = detectfaces.get_result()
