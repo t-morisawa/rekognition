@@ -22,7 +22,9 @@
         ></el-image>
         <p v-if="datum.result">
           {{ datum.result[0].AgeRange.Low }} -
-          {{ datum.result[0].AgeRange.High }}
+          {{ datum.result[0].AgeRange.High }},
+          {{ datum.result[0].Gender.Value }}
+          ({{ Math.round(datum.result[0].Gender.Confidence) }}%)
         </p>
       </div>
     </div>
@@ -69,7 +71,7 @@ export default {
           vm.data.forEach((datum, index) => {
             datum.result = response.data[index].result.FaceDetails;
           });
-          console.log(vm.data);
+          console.log(response.data);
         })
         .catch(function (error) {
           console.log(error);
