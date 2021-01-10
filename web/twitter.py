@@ -38,15 +38,20 @@ class GetTweetImage:
         #key_account = input('Enter account name:')
         #count_no = int(input('Set search count:'))
         #search_results = tweepy.Cursor(api.user_timeline, screen_name=key_account).items(count_no)
-        search_results = tweepy.Cursor(api.user_timeline, screen_name=accountName, include_rts=False).items(100)
+        IMAGE_TWEET_NUM = 30
+        image_tweet_count = 0
+        search_results = tweepy.Cursor(api.user_timeline, screen_name=accountName, include_rts=False).items()
 
         twitter_images_list = []
         try:
             for result in search_results:
-                if hasattr(result, 'extended_entities'):  # 画像ツイート
+                if hasattr(result, 'extended_entities') and (image_tweet_count <= IMAGE_TWEET_NUM) :  # 画像ツイート
                     for photo in result.extended_entities['media']:
                         twitter_image = TwitterImage(photo['media_url'], b'', result.created_at, {})
                         twitter_images_list.append(twitter_image)
+                    image_tweet_count += 1
+                if image_tweet_count > IMAGE_TWEET_NUM:
+                    break
         except tweepy.error.TweepError:
             # 画像取得タイムアウト例外
             pass
