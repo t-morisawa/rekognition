@@ -40,7 +40,7 @@ class GetTweetImage:
         #search_results = tweepy.Cursor(api.user_timeline, screen_name=key_account).items(count_no)
         IMAGE_TWEET_NUM = 30
         image_tweet_count = 0
-        search_results = tweepy.Cursor(api.user_timeline, screen_name=accountName, include_rts=False).items()
+        search_results = tweepy.Cursor(api.user_timeline, screen_name=accountName, exclude_replies=True, include_rts=False).items()
 
         twitter_images_list = []
         try:
